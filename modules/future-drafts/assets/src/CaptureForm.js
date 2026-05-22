@@ -1,0 +1,198 @@
+import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
+import {
+	Button,
+	DatePicker,
+	Notice,
+	Flex,
+	FlexItem,
+} from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { dateI18n } from '@wordpress/date';
+import { createEntry, today, addDays, addMonths } from './api';
+
+const PRESETS = [
+	{ key: '1w', label: __( '1 week', 'future-drafts' ), apply: ( t ) => addDays( t, 7 ) },
+	{ key: '1m', label: __( '1 month', 'future-drafts' ), apply: ( t ) => addMonths( t, 1 ) },
+	{ key: '3m', label: __( '3 months', 'future-drafts' ), apply: ( t ) => addMonths( t, 3 ) },
+];
+
+export default function CaptureForm( { onCreated } ) {
+	const [ title, setTitle ] = useState( '' );
+	const [ content, setContent ] = useState( '' );
+	const [ date, setDate ] = useState( null );
+	const [ submitting, setSubmitting ] = useState( false );
+	const [ error, setError ] = useState( null );
+	const [ pickerOpen, setPickerOpen ] = useState( false );
+	const [ pickerPos, setPickerPos ] = useState( null );
+	const triggerRef = useRef( null );
+	const pickerRef = useRef( null );
+
+	const computePickerPos = useCallback( () => {
+		if ( ! triggerRef.current ) {
+			return null;
+		}
+		const rect = triggerRef.current.getBoundingClientRect();
+		return { top: rect.top - 150, left: rect.right + 8 };
+	}, [] );
+
+	const openPicker = () => {
+		setPickerPos( computePickerPos() );
+		setPickerOpen( true );
+	};
+
+	useEffect( () => {
+		if ( ! pickerOpen ) {
+			return;
+		}
+		const onDocMouseDown = ( e ) => {
+			if ( triggerRef.current && triggerRef.current.contains( e.target ) ) {
+				return;
+			}
+			if ( pickerRef.current && pickerRef.current.contains( e.target ) ) {
+				return;
+			}
+			setPickerOpen( false );
+		};
+		const onKeyDown = ( e ) => {
+			if ( e.key === 'Escape' ) {
+				setPickerOpen( false );
+			}
+		};
+		const onScrollOrResize = () => {
+			setPickerOpen( false );
+		};
+		document.addEventListener( 'mousedown', onDocMouseDown );
+		document.addEventListener( 'keydown', onKeyDown );
+		window.addEventListener( 'scroll', onScrollOrResize, true );
+		window.addEventListener( 'resize', onScrollOrResize );
+		return () => {
+			document.removeEventListener( 'mousedown', onDocMouseDown );
+			document.removeEventListener( 'keydown', onKeyDown );
+			window.removeEventListener( 'scroll', onScrollOrResize, true );
+			window.removeEventListener( 'resize', onScrollOrResize );
+		};
+	}, [ pickerOpen ] );
+
+	const canSubmit = ( title.trim() !== '' || content.trim() !== '' ) && date && ! submitting;
+
+	const submit = async () => {
+		if ( ! canSubmit ) {
+			return;
+		}
+		setSubmitting( true );
+		setError( null );
+		try {
+			const entry = await createEntry( { title, content, remind_on: date } );
+			setTitle( '' );
+			setContent( '' );
+			setDate( null );
+			onCreated && onCreated( entry );
+		} catch ( e ) {
+			setError( e.message || __( 'Could not save.', 'future-drafts' ) );
+		} finally {
+			setSubmitting( false );
+		}
+	};
+
+	const applyPreset = ( preset ) => {
+		setDate( preset.apply( today() ) );
+	};
+
+	return (
+		<div className="future-drafts-capture">
+			<div className="input-text-wrap">
+				<label htmlFor="future-drafts-title">
+					{ __( 'Title of Post', 'future-drafts' ) }
+				</label>
+				<input
+					type="text"
+					id="future-drafts-title"
+					name="future-drafts-title"
+					value={ title }
+					onChange={ ( e ) => setTitle( e.target.value ) }
+					autoComplete="off"
+				/>
+			</div>
+
+			<div className="textarea-wrap">
+				<label htmlFor="future-drafts-content">
+					{ __( 'Get a heads start', 'future-drafts' ) }
+				</label>
+				<textarea
+					id="future-drafts-content"
+					name="future-drafts-content"
+					placeholder={ __( 'A few notes for your future self…', 'future-drafts' ) }
+					rows={ 3 }
+					value={ content }
+					onChange={ ( e ) => setContent( e.target.value ) }
+					autoComplete="off"
+				/>
+			</div>
+
+			<div className="future-drafts-capture__date">
+				<label htmlFor="future-drafts-date-toggle">
+					{ __( 'Remind me to pick this back up', 'future-drafts' ) }
+				</label>
+				<Flex gap={ 2 } justify="flex-start" wrap>
+					{ PRESETS.map( ( p ) => (
+						<FlexItem key={ p.key }>
+							<Button
+								variant={ date === p.apply( today() ) ? 'primary' : 'secondary' }
+								size="small"
+								onClick={ () => applyPreset( p ) }
+							>
+								{ p.label }
+							</Button>
+						</FlexItem>
+					) ) }
+					<FlexItem>
+						<Button
+							ref={ triggerRef }
+							id="future-drafts-date-toggle"
+							variant="link"
+							className="future-drafts-capture__date-link"
+							onClick={ () => ( pickerOpen ? setPickerOpen( false ) : openPicker() ) }
+							aria-expanded={ pickerOpen }
+						>
+							{ date
+								? dateI18n( 'M j, Y', `${ date }T00:00:00` )
+								: __( 'Pick a date', 'future-drafts' ) }
+						</Button>
+					</FlexItem>
+					<FlexItem className="future-drafts-capture__save">
+						<Button
+							variant="primary"
+							onClick={ submit }
+							disabled={ ! canSubmit }
+							isBusy={ submitting }
+						>
+							{ __( 'Save for later', 'future-drafts' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
+			</div>
+
+			{ pickerOpen && pickerPos && (
+				<div
+					ref={ pickerRef }
+					className="future-drafts-capture__datepicker"
+					style={ {
+						position: 'fixed',
+						top: pickerPos.top,
+						left: pickerPos.left,
+					} }
+				>
+					<DatePicker
+						currentDate={ date || undefined }
+						onChange={ ( value ) => {
+							setDate( value ? value.slice( 0, 10 ) : null );
+							setPickerOpen( false );
+						} }
+					/>
+				</div>
+			) }
+
+			{ error && <Notice status="error" isDismissible={ false }>{ error }</Notice> }
+		</div>
+	);
+}

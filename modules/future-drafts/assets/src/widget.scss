@@ -1,0 +1,213 @@
+// When the pending band is showing, treat .inside itself as the gray
+// canvas: zero out its padding, give it the gray background, and let
+// the white __main wrapper carry the non-pending content and recreate
+// the horizontal padding .inside used to provide. The pending section
+// then needs no negative margins — it just sits flush with .inside's
+// (now padding-less) edges, which equal the widget's content edges.
+#future_drafts_widget .inside:has( .future-drafts__section--pending ) {
+	padding: 0;
+	background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
+	// #dashboard-widgets .postbox has border-radius: 8px and a 1px
+	// border, so the inner content-edge curves with a 7px radius.
+	// Match it on .inside's bottom so the gray bg doesn't square off
+	// the postbox's rounded corners; overflow: hidden clips the
+	// pending section's own bottom corners to the same curve.
+	border-radius: 0 0 7px 7px;
+	overflow: hidden;
+}
+
+#future_drafts_widget .inside:has( .future-drafts__section--pending ) .future-drafts__main {
+	background: #fff;
+	padding: 0 12px 16px;
+	// Contain the first child's margin-top so it doesn't collapse up
+	// through __main and reveal .inside's gray background above the
+	// white card. display: flow-root creates a block formatting
+	// context, same idea as overflow: hidden but without clipping.
+	display: flow-root;
+}
+
+.future-drafts {
+	font-size: 13px;
+
+	&__subtitle {
+		color: #50575e;
+		margin: 0 0 12px;
+	}
+
+	&__section {
+		margin-top: 16px;
+		padding-top: 12px;
+		border-top: 1px solid #f0f0f1;
+
+		&--due {
+			background: color-mix( in srgb, var( --wp-admin-theme-color, #2271b1 ) 6%, transparent );
+			padding: 12px;
+			border: 1px solid color-mix( in srgb, var( --wp-admin-theme-color, #2271b1 ) 30%, #fff );
+			border-radius: 4px;
+			margin-top: 4px;
+			margin-bottom: 14px;
+		}
+
+		// Gray band at the bottom of the widget, full-width to the
+		// postbox edges. -12px left/right cancels .postbox .inside's
+		// 12px horizontal padding so the top border runs corner to
+		// corner. Background + border color mirror the form band in the
+		// ideas-inbox widget so the two read as the same idiom.
+		&--pending {
+			margin: 0;
+			padding: 12px;
+			background: var( --wpds-color-bg-surface-neutral-weak, #f6f7f7 );
+			border-top: 1px solid var( --wpds-color-stroke-surface-neutral-weak, #dcdcde );
+		}
+
+	}
+
+	// The count sits inside .future-drafts__section--pending whose
+	// padding gives it equal top/bottom breathing room. Zero margins
+	// here so when the list is collapsed the count is vertically
+	// centered between the band's top border and its bottom edge;
+	// when expanded, a small margin-bottom restores the gap above
+	// the first row.
+	&__pending-count {
+		margin: 0;
+		font: inherit;
+		color: inherit;
+
+		&:not( :last-child ) {
+			margin-bottom: 8px;
+		}
+
+		// Strip <button> chrome when used as the toggle so it reads as
+		// plain paragraph text. Flex layout groups the count and the
+		// chevron together so the chevron sits flush against the end
+		// of the text instead of at the far right of the band.
+		&--toggle {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			gap: 4px;
+			width: 100%;
+			padding: 0;
+			background: none;
+			border: 0;
+			text-align: inherit;
+			cursor: pointer;
+		}
+
+		svg {
+			width: 18px;
+			height: 18px;
+			flex-shrink: 0;
+		}
+	}
+
+}
+
+.future-drafts-capture {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	&__save {
+		margin-left: auto;
+	}
+
+	label {
+		display: inline-block;
+		margin-bottom: 4px;
+	}
+
+	input[type="text"],
+	textarea {
+		width: 100%;
+		box-sizing: border-box;
+		margin: 0;
+	}
+
+	// Link-styled toggle that sits next to the preset buttons. Matches the
+	// secondary-action treatment Draft Sweeper uses for its "Not today" link
+	// (.ds-dismiss): no chrome, admin-scheme accent, underline on hover only.
+	&__date-link.components-button.is-link {
+		color: var( --wp-admin-theme-color, #2271b1 );
+		text-decoration: none;
+		box-shadow: none;
+
+		&:hover:not( :disabled ),
+		&:focus:not( :disabled ),
+		&:focus-visible:not( :disabled ) {
+			color: var( --wp-admin-theme-color, #2271b1 );
+			text-decoration: underline;
+		}
+	}
+}
+
+.future-drafts-row {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 8px 0;
+
+	&__main {
+		flex: 1;
+		min-width: 0;
+	}
+
+	&__title {
+		font-weight: 600;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	&__excerpt {
+		color: #50575e;
+		font-size: 12px;
+		margin-top: 2px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+
+	&__meta {
+		color: #757575;
+		font-size: 11px;
+		margin-top: 4px;
+	}
+
+	&__actions {
+		display: flex;
+		gap: 4px;
+		flex-shrink: 0;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	&__delete {
+		margin-left: 4px;
+	}
+}
+
+.future-drafts-snooze__custom {
+	padding: 8px;
+}
+
+// Inline date picker positioned via JS (position: fixed, top/left set
+// from the trigger's getBoundingClientRect) so it sits flush next to
+// the Pick a date link and escapes the dashboard widget's overflow
+// clipping. Top stays put as the calendar height changes; closes on
+// scroll/resize since it can't follow.
+.future-drafts-capture__datepicker {
+	z-index: 100000;
+	min-width: 280px;
+	padding: 12px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.08 );
+}

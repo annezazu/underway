@@ -1,0 +1,245 @@
+/* Draft Sweeper widget — a small bookplate for the day's draft. */
+#draft_sweeper_widget .inside { margin: 0; padding: 0; }
+
+.ds-widget {
+  --ds-text: #1d2327;
+  --ds-text-secondary: #50575e;
+  --ds-text-soft: #787c82;
+  --ds-paper: #f6f7f7;
+  --ds-accent: var(--wp-admin-theme-color, #2271b1);
+  position: relative;
+  color: var(--ds-text);
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--ds-paper);
+  /* #dashboard-widgets .postbox has border-radius: 8px and a 1px
+     border, so the inner content edge curves with a 7px radius.
+     Match it on the bottom corners so the gray bg doesn't square off
+     the postbox's rounded corners. overflow: hidden clips any inner
+     content (last .ds-item, etc.) to the same curve. */
+  border-radius: 0 0 7px 7px;
+  overflow: hidden;
+}
+
+.ds-list { margin: 0; padding: 0; list-style: none; }
+
+.ds-item {
+  margin: 0;
+  padding: 24px 22px;
+}
+.ds-item.is-dismissing { opacity: 0.4; transition: opacity 0.2s; }
+
+.ds-badge {
+  display: block;
+  /* Right-padding leaves room for the absolute top-right "Use AI" toggle. */
+  padding-right: 100px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--ds-text-secondary);
+}
+
+.ds-teaser {
+  margin: 0 0 14px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--ds-text);
+}
+
+.ds-title {
+  display: block;
+  font-weight: 500;
+  font-size: 12px;
+  text-decoration: none;
+  color: var(--ds-text-secondary);
+  letter-spacing: 0.01em;
+}
+.ds-title:hover { color: var(--ds-accent); text-decoration: underline; }
+.ds-untitled { font-style: italic; color: var(--ds-text-soft); }
+
+.ds-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+}
+.ds-widget .ds-dismiss {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  color: var(--ds-accent);
+  text-decoration: none;
+}
+.ds-widget .ds-dismiss:hover,
+.ds-widget .ds-dismiss:focus {
+  text-decoration: underline;
+  background: transparent;
+  color: var(--ds-accent);
+}
+
+/*
+ * "Use AI" toggle — minimal chrome floated top-right of the widget body.
+ * Visual replica of @wordpress/components ToggleControl. Same markup
+ * pattern as Habit Creator and Jot so the three feel like one feature
+ * across plugins.
+ */
+.ds-ai-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.ds-ai-toggle__form-toggle {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  flex: 0 0 auto;
+  border-radius: 9px;
+}
+
+.ds-ai-toggle__form-toggle:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+}
+
+.ds-ai-toggle__form-toggle .components-form-toggle__track {
+  position: absolute;
+  inset: 0;
+  width: 36px;
+  height: 18px;
+  border-radius: 9px;
+  background: #757575;
+  transition: background 0.1s ease;
+}
+
+.ds-ai-toggle__form-toggle.is-checked .components-form-toggle__track {
+  background: var(--ds-accent);
+}
+
+.ds-ai-toggle__form-toggle .components-form-toggle__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.ds-ai-toggle__form-toggle.is-checked .components-form-toggle__thumb {
+  transform: translateX(18px);
+}
+
+.ds-ai-toggle__spinner {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  border-top-color: var(--ds-accent);
+  opacity: 0;
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+
+.ds-ai-toggle__form-toggle.is-checked .ds-ai-toggle__spinner {
+  transform: translateX(18px);
+  border-color: rgba(255, 255, 255, 0.5);
+  border-top-color: #fff;
+}
+
+.ds-ai-toggle__form-toggle.is-saving .ds-ai-toggle__spinner {
+  opacity: 1;
+  animation: ds-ai-spin 0.6s linear infinite;
+}
+
+.ds-ai-toggle__form-toggle.is-saving .components-form-toggle__thumb {
+  opacity: 0;
+}
+
+.ds-ai-toggle__form-toggle.is-saving .components-form-toggle__track {
+  animation: ds-ai-pulse 0.9s ease-in-out infinite;
+}
+
+.ds-ai-toggle__form-toggle.is-checked.is-saving .ds-ai-toggle__spinner {
+  animation-name: ds-ai-spin-checked;
+}
+
+@keyframes ds-ai-spin {
+  to { transform: translateX(0) rotate(360deg); }
+}
+
+@keyframes ds-ai-spin-checked {
+  from { transform: translateX(18px) rotate(0deg); }
+  to   { transform: translateX(18px) rotate(360deg); }
+}
+
+@keyframes ds-ai-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+.ds-ai-toggle__label {
+  font-size: 12px;
+  color: var(--ds-text-soft);
+  cursor: pointer;
+  user-select: none;
+}
+
+/*
+ * Tooltip — visually hidden until the label is hovered or the toggle
+ * receives keyboard focus. Sits just below the toggle, anchored to its
+ * right edge so it doesn't overflow the widget on narrow viewports.
+ */
+.ds-ai-toggle__tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 2;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #1d2327;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.ds-ai-toggle:hover .ds-ai-toggle__tooltip,
+.ds-ai-toggle__form-toggle:focus-visible ~ .ds-ai-toggle__tooltip,
+.ds-ai-toggle__label:focus-visible ~ .ds-ai-toggle__tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ds-empty {
+  margin: 0;
+  padding: 36px 22px;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ds-text-secondary);
+}

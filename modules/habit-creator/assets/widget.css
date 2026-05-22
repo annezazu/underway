@@ -1,0 +1,396 @@
+/*
+ * Strip WP's default .postbox .inside padding/margin and put 24/22
+ * chrome on .habit-creator instead. Mirrors Draft Sweeper's pattern so
+ * the floated "Uses AI" toggle (positioned 14/14 from .habit-creator)
+ * lands 14px from the postbox edges rather than 14px inside the
+ * default padded content area.
+ */
+#habit_creator_widget .inside {
+	margin: 0;
+	padding: 0;
+}
+
+.habit-creator {
+	position: relative;
+	padding: 24px 22px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #1d2327;
+
+	/*
+	 * Adopt the active admin color scheme. WordPress core sets
+	 * --wp-admin-theme-color per scheme (default Modern → #3858E9,
+	 * Default Blue → #2271b1, Coffee → #59524c, etc.). We derive a soft
+	 * tint from that single token using color-mix so the widget reads as
+	 * part of the admin chrome, not an island.
+	 */
+	--habit-creator-accent: var( --wp-admin-theme-color, #2271b1 );
+	--habit-creator-accent-bg: color-mix( in srgb, var( --wp-admin-theme-color, #2271b1 ) 6%, #fff );
+	--habit-creator-accent-border: color-mix( in srgb, var( --wp-admin-theme-color, #2271b1 ) 25%, #fff );
+}
+
+/*
+ * "Uses AI" toggle — minimal chrome floated top-right of the widget
+ * body. Visual replica of @wordpress/components FormToggle (the inner
+ * control of ToggleControl). We reuse the .components-form-toggle
+ * classnames so anyone reading the markup recognizes it as the
+ * standard WP toggle, but inline the styles here so we don't pull in
+ * the full wp-components CSS bundle for one switch. Same pattern as
+ * Draft Sweeper so the two widgets feel like one feature.
+ *
+ * Track 36×18, thumb 12×12, slides 14px on check. Theme color comes
+ * from --wp-admin-theme-color so the toggle adopts the active admin
+ * color scheme like the rest of the widget.
+ */
+.habit-creator-ai-toggle {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	z-index: 1;
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+}
+
+.habit-creator-ai-toggle__form-toggle {
+	position: relative;
+	display: inline-block;
+	width: 36px;
+	height: 18px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	flex: 0 0 auto;
+	border-radius: 9px;
+}
+
+.habit-creator-ai-toggle__form-toggle:focus-visible {
+	outline: 2px solid var( --wp-admin-theme-color, #2271b1 );
+	outline-offset: 2px;
+}
+
+.habit-creator-ai-toggle__form-toggle .components-form-toggle__track {
+	position: absolute;
+	inset: 0;
+	width: 36px;
+	height: 18px;
+	border-radius: 9px;
+	background: #757575;
+	transition: background 0.1s ease;
+}
+
+.habit-creator-ai-toggle__form-toggle.is-checked .components-form-toggle__track {
+	background: var( --wp-admin-theme-color, #2271b1 );
+}
+
+.habit-creator-ai-toggle__form-toggle .components-form-toggle__thumb {
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 1px 1px rgba( 0, 0, 0, 0.15 );
+	transition: transform 0.1s ease;
+}
+
+.habit-creator-ai-toggle__form-toggle.is-checked .components-form-toggle__thumb {
+	transform: translateX( 18px );
+}
+
+/*
+ * Save spinner sits inside the thumb. Only visible during the AJAX
+ * round-trip (.is-saving). The track also pulses so the change of
+ * state is unmissable even on fast saves where the spinner barely
+ * appears.
+ */
+.habit-creator-ai-toggle__spinner {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	border: 1.5px solid rgba( 0, 0, 0, 0.2 );
+	border-top-color: var( --wp-admin-theme-color, #2271b1 );
+	opacity: 0;
+	transition: opacity 0.1s ease, transform 0.1s ease;
+}
+
+.habit-creator-ai-toggle__form-toggle.is-checked .habit-creator-ai-toggle__spinner {
+	transform: translateX( 18px );
+	border-color: rgba( 255, 255, 255, 0.5 );
+	border-top-color: #fff;
+}
+
+.habit-creator-ai-toggle__form-toggle.is-saving .habit-creator-ai-toggle__spinner {
+	opacity: 1;
+	animation: habit-creator-ai-spin 0.6s linear infinite;
+}
+
+.habit-creator-ai-toggle__form-toggle.is-saving .components-form-toggle__thumb {
+	opacity: 0;
+}
+
+.habit-creator-ai-toggle__form-toggle.is-saving .components-form-toggle__track {
+	animation: habit-creator-ai-pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes habit-creator-ai-spin {
+	to { transform: translateX( 0 ) rotate( 360deg ); }
+}
+
+.habit-creator-ai-toggle__form-toggle.is-checked.is-saving .habit-creator-ai-toggle__spinner {
+	animation-name: habit-creator-ai-spin-checked;
+}
+
+@keyframes habit-creator-ai-spin-checked {
+	from { transform: translateX( 18px ) rotate( 0deg ); }
+	to   { transform: translateX( 18px ) rotate( 360deg ); }
+}
+
+@keyframes habit-creator-ai-pulse {
+	0%, 100% { opacity: 1; }
+	50%      { opacity: 0.55; }
+}
+
+.habit-creator-ai-toggle__label {
+	font-size: 12px;
+	color: #787c82;
+	cursor: pointer;
+	user-select: none;
+}
+
+/*
+ * Tooltip — visually hidden until the wrapper is hovered or the toggle
+ * receives keyboard focus. Sits just below the toggle, anchored to its
+ * right edge so it doesn't overflow the widget on narrow viewports.
+ */
+.habit-creator-ai-toggle__tooltip {
+	position: absolute;
+	top: calc( 100% + 6px );
+	right: 0;
+	z-index: 2;
+	padding: 6px 10px;
+	border-radius: 4px;
+	background: #1d2327;
+	color: #fff;
+	font-size: 12px;
+	line-height: 1.4;
+	white-space: nowrap;
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY( -2px );
+	transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.habit-creator-ai-toggle:hover .habit-creator-ai-toggle__tooltip,
+.habit-creator-ai-toggle__form-toggle:focus-visible ~ .habit-creator-ai-toggle__tooltip,
+.habit-creator-ai-toggle__label:focus-visible ~ .habit-creator-ai-toggle__tooltip {
+	opacity: 1;
+	transform: translateY( 0 );
+}
+
+.habit-creator-empty-lead {
+	margin: 0 0 6px;
+	color: #1d2327;
+}
+
+.habit-creator-empty {
+	margin: 0 0 14px;
+	color: #50575e;
+}
+
+.habit-creator-empty-card {
+	padding: 13px 11px;
+	text-align: center;
+}
+
+.habit-creator-empty-actions {
+	margin: 0;
+}
+
+.habit-creator-card {
+	position: relative;
+}
+
+.habit-creator-card.is-hero {
+	padding: 0;
+}
+
+.habit-creator-headline {
+	/* Right-padding leaves room for the absolute top-right "Uses AI" toggle. */
+	padding-right: 100px;
+	margin: 0 0 6px;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: #1d2327;
+}
+
+/*
+ * Visual match for @wordpress/components FormTokenField tokens
+ * (.components-form-token-field__token). Same compact rectangle the
+ * block editor uses for tag/category tokens, recreated locally so we
+ * don't have to pull in the full wp-components CSS bundle just for one
+ * pill. Reads as "this is a taxonomy term", consistent with the rest
+ * of the WordPress admin.
+ */
+.habit-creator-pill {
+	display: inline-block;
+	padding: 0 6px;
+	border-radius: 2px;
+	background: #f0f0f0;
+	color: #1e1e1e;
+	font-size: 0.95em;
+	font-weight: 400;
+	line-height: 1.5;
+	vertical-align: baseline;
+	white-space: nowrap;
+}
+
+.habit-creator-pill-prefix {
+	color: #757575;
+	margin-right: 1px;
+}
+
+.habit-creator-body {
+	margin: 0 0 12px;
+	font-size: 13px;
+	color: #50575e;
+}
+
+/*
+ * Vertical "streak track" — soft pill behind the icon column visually
+ * threads the past posts together as a single ongoing streak. The
+ * current (most-recent) post breaks out of the gray with a filled
+ * accent-color circle and the 🔥 — the streak's live edge.
+ */
+.habit-creator-streak {
+	position: relative;
+	list-style: none;
+	margin: 0;
+	padding: 4px 0 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.habit-creator-streak::before {
+	content: '';
+	position: absolute;
+	left: 4px;
+	top: 4px;
+	bottom: 4px;
+	width: 28px;
+	background: color-mix( in srgb, var( --wp-admin-theme-color, #2271b1 ) 6%, #fff );
+	border-radius: 999px;
+	z-index: 0;
+}
+
+.habit-creator-streak-row {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	padding: 4px 10px 4px 0;
+	margin-bottom: 0; /* override wp-admin/css/common.css `li, dd { margin-bottom: 6px }` */
+	min-width: 0;
+}
+
+.habit-creator-streak-icon {
+	flex: 0 0 28px;
+	width: 28px;
+	height: 28px;
+	margin-left: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 999px;
+	color: var( --habit-creator-accent );
+}
+
+.habit-creator-streak-row.is-next .habit-creator-streak-icon {
+	background: var( --habit-creator-accent );
+	color: #fff;
+}
+
+.habit-creator-streak-row.is-next {
+	margin-top: 4px;
+}
+
+.habit-creator-streak-cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+}
+
+/*
+ * Secondary link-styled "Suggest another" button: accent-colored,
+ * no chrome, underline appears on hover/focus. Mirrors the Draft
+ * Sweeper "Not today" pattern. Primary "Create a post" CTA uses the
+ * standard WP .button.button-primary alongside it.
+ */
+.habit-creator-suggest {
+	background: none;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	box-shadow: none;
+	cursor: pointer;
+	font: inherit;
+	color: var( --habit-creator-accent );
+	text-decoration: none;
+}
+
+.habit-creator-suggest:hover,
+.habit-creator-suggest:focus {
+	text-decoration: underline;
+	background: transparent;
+	color: var( --habit-creator-accent );
+}
+
+.habit-creator-streak-line {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	min-width: 0;
+}
+
+.habit-creator-streak-excerpt {
+	margin-top: -2px;
+	padding-left: 137px; /* icon-margin (4) + icon-width (28) + gap (6) + ago-margin (8) + date-width (85) + gap (6) — aligns with title start */
+	font-size: 12px;
+	line-height: 1.3;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.habit-creator-streak-ago {
+	flex: 0 0 85px;
+	margin-left: 8px;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.habit-creator-streak-title {
+	flex: 0 1 auto;
+	min-width: 0;
+	max-width: 100%;
+	font-size: 13px;
+	color: #2271b1;
+	text-decoration: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.habit-creator-streak-title:hover,
+.habit-creator-streak-title:focus {
+	color: #4f94d4;
+}
