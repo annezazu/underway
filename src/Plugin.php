@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace Underway;
 
+use Underway\Admin\DashboardBadge;
 use Underway\Admin\Notices;
 use Underway\Admin\Onboarding;
 use Underway\Admin\SettingsPage;
@@ -20,6 +21,7 @@ final class Plugin {
 	private SettingsPage   $settings;
 	private Onboarding     $onboarding;
 	private Notices        $notices;
+	private DashboardBadge $dashboard_badge;
 
 	public static function boot(): void {
 		if ( self::$instance !== null ) {
@@ -39,8 +41,9 @@ final class Plugin {
 	private function __construct() {
 		$this->registry   = new ModuleRegistry();
 		$this->settings   = new SettingsPage( $this->registry );
-		$this->onboarding = new Onboarding( $this->registry );
-		$this->notices    = new Notices();
+		$this->onboarding      = new Onboarding( $this->registry );
+		$this->notices         = new Notices();
+		$this->dashboard_badge = new DashboardBadge( $this->registry );
 	}
 
 	public function registry(): ModuleRegistry {
@@ -58,6 +61,7 @@ final class Plugin {
 			$this->settings->register();
 			$this->onboarding->register();
 			$this->notices->register();
+			$this->dashboard_badge->register();
 		}
 	}
 }
