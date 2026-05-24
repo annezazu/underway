@@ -271,11 +271,32 @@ final class DashboardWidget
 
     private static function aiProviderRegistered(): bool
     {
+        // When bundled inside Underway, use the shared resolver which also
+        // verifies a credential is configured, not just that a provider type exists.
+        if (defined('UNDERWAY_BUNDLED') && class_exists('\\Underway\\Ai\\ProviderResolver')) {
+            return \Underway\Ai\ProviderResolver::has_provider();
+        }
         if (! function_exists('wp_get_connectors')) {
             return false;
         }
-        foreach ((array) wp_get_connectors() as $connector) {
-            if (($connector['type'] ?? '') === 'ai_provider') {
+        // Match Underway's stricter rule: provider type + configured credential.
+        foreach ((array) wp_get_connectors() as $id => $connector) {
+            if (($connector['type'] ?? '') !== 'ai_provider') {
+                continue;
+            }
+            $auth = (array) ($connector['authentication'] ?? []);
+            if (($auth['method'] ?? '') !== 'api_key') {
+                return true;
+            }
+            $settingName = $auth['setting_name'] ?? null;
+            if ($settingName !== null) {
+                $option = get_option($settingName);
+                if (is_string($option) && $option !== '') {
+                    return true;
+                }
+            }
+            $envValue = getenv(strtoupper((string) $id) . '_API_KEY');
+            if (is_string($envValue) && $envValue !== '') {
                 return true;
             }
         }

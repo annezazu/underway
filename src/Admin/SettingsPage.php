@@ -157,20 +157,26 @@ final class SettingsPage {
 							</p>
 
 							<?php if ( ! $has_provider ) : ?>
-								<div class="underway-ai-note">
-									<span class="dashicons dashicons-info-outline" aria-hidden="true"></span>
-									<span>
-										<?php
-										printf(
-											/* translators: %s is a link to AI provider settings or docs. */
-											esc_html__( 'No AI provider is connected. AI-enhanced widgets will fall back to non-AI behavior. %s', 'underway' ),
-											'<a href="' . esc_url( ProviderResolver::settings_url() ) . '">' . esc_html__( 'Connect an AI provider →', 'underway' ) . '</a>'
-										);
-										?>
+								<div class="underway-empty-state" role="region" aria-labelledby="underway-no-provider-heading">
+									<span class="underway-empty-state__icon" aria-hidden="true">
+										<span class="dashicons dashicons-admin-plugins"></span>
 									</span>
+									<div class="underway-empty-state__body">
+										<h3 id="underway-no-provider-heading" class="underway-empty-state__title">
+											<?php esc_html_e( 'No AI provider connected yet', 'underway' ); ?>
+										</h3>
+										<p class="underway-empty-state__desc">
+											<?php esc_html_e( 'AI-enhanced widgets are working today without AI. Connect a provider through the WordPress Connectors API to unlock draft summaries (Draft Sweeper) and writing prompts (Habit Creator).', 'underway' ); ?>
+										</p>
+										<p class="underway-empty-state__actions">
+											<a class="button button-primary" href="<?php echo esc_url( ProviderResolver::settings_url() ); ?>">
+												<?php esc_html_e( 'Open connector settings', 'underway' ); ?>
+												<span class="dashicons dashicons-external" aria-hidden="true"></span>
+											</a>
+										</p>
+									</div>
 								</div>
-							<?php endif; ?>
-
+							<?php else : ?>
 							<div class="underway-panel">
 								<div class="underway-panel__row">
 									<div class="underway-panel__row-label">
@@ -207,6 +213,7 @@ final class SettingsPage {
 									</div>
 								<?php endforeach; ?>
 							</div>
+							<?php endif; ?>
 						</section>
 					<?php endif; ?>
 

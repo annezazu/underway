@@ -456,6 +456,81 @@
 	cursor: not-allowed;
 }
 
+/* Empty state — shown in the AI section when no provider is connected. */
+.underway-empty-state {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	padding: 24px;
+	background: var(--uw-surface);
+	border: 1px dashed color-mix(in srgb, var(--uw-accent) 35%, var(--uw-stroke));
+	border-radius: var(--uw-radius-card);
+}
+
+.underway-empty-state__icon {
+	flex: none;
+	width: 56px;
+	height: 56px;
+	border-radius: 14px;
+	background: linear-gradient(135deg,
+		color-mix(in srgb, var(--uw-accent) 12%, #fff) 0%,
+		color-mix(in srgb, var(--uw-accent) 5%, #fff) 100%);
+	color: var(--uw-accent);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.underway-empty-state__icon .dashicons {
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
+}
+
+.underway-empty-state__body {
+	flex: 1;
+	min-width: 0;
+}
+
+.underway-empty-state__title {
+	margin: 0 0 6px;
+	padding: 0;
+	font-size: 16px;
+	font-weight: 700;
+	color: var(--uw-fg);
+}
+
+.underway-empty-state__desc {
+	margin: 0 0 14px;
+	color: var(--uw-fg-muted);
+	font-size: 13.5px;
+	line-height: 1.55;
+	max-width: 70ch;
+}
+
+.underway-empty-state__actions {
+	margin: 0;
+}
+
+.underway-empty-state__actions .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	line-height: 1;
+}
+
+.underway-empty-state__actions .button .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 1;
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	opacity: .9;
+}
+
 /* When the master is on, per-widget rows follow the master and are visually muted. */
 .underway-panel.is-master-on .underway-panel__row:not(:first-child) {
 	opacity: .55;

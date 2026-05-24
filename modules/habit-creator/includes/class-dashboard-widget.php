@@ -154,11 +154,31 @@ final class Dashboard_Widget {
 	}
 
 	private static function ai_provider_registered(): bool {
+		// When bundled inside Underway, defer to the shared resolver so the
+		// widget agrees with the settings page on whether AI is really available.
+		if ( defined( 'UNDERWAY_BUNDLED' ) && class_exists( '\\Underway\\Ai\\ProviderResolver' ) ) {
+			return \Underway\Ai\ProviderResolver::has_provider();
+		}
 		if ( ! function_exists( 'wp_get_connectors' ) ) {
 			return false;
 		}
-		foreach ( (array) wp_get_connectors() as $connector ) {
-			if ( ( $connector['type'] ?? '' ) === 'ai_provider' ) {
+		foreach ( (array) wp_get_connectors() as $id => $connector ) {
+			if ( ( $connector['type'] ?? '' ) !== 'ai_provider' ) {
+				continue;
+			}
+			$auth = (array) ( $connector['authentication'] ?? [] );
+			if ( ( $auth['method'] ?? '' ) !== 'api_key' ) {
+				return true;
+			}
+			$setting_name = $auth['setting_name'] ?? null;
+			if ( $setting_name !== null ) {
+				$option = get_option( $setting_name );
+				if ( is_string( $option ) && $option !== '' ) {
+					return true;
+				}
+			}
+			$env_value = getenv( strtoupper( (string) $id ) . '_API_KEY' );
+			if ( is_string( $env_value ) && $env_value !== '' ) {
 				return true;
 			}
 		}
