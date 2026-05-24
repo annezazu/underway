@@ -262,9 +262,6 @@ final class SettingsPage {
 						<button type="submit" class="button button-primary button-hero underway-onboarding__cta">
 							<?php esc_html_e( 'Save changes', 'underway' ); ?>
 						</button>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . Onboarding::PAGE_SLUG ) ); ?>" class="button underway-secondary-btn">
-							<?php esc_html_e( 'Run setup again', 'underway' ); ?>
-						</a>
 						<p class="underway-onboarding__hint">
 							<?php
 							printf(
