@@ -513,25 +513,6 @@
 	margin: 0;
 }
 
-.underway-empty-state__actions .button {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	line-height: 1;
-}
-
-.underway-empty-state__actions .button .dashicons {
-	font-size: 16px;
-	width: 16px;
-	height: 16px;
-	line-height: 1;
-	margin: 0;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	opacity: .9;
-}
-
 /* When the master is on, per-widget rows follow the master and are visually muted. */
 .underway-panel.is-master-on .underway-panel__row:not(:first-child) {
 	opacity: .55;

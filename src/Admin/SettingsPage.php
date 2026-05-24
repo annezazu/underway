@@ -169,7 +169,7 @@ final class SettingsPage {
 											<?php esc_html_e( 'AI-enhanced widgets are working today without AI. Connect a provider through the WordPress Connectors API to unlock draft summaries (Draft Sweeper) and writing prompts (Habit Creator).', 'underway' ); ?>
 										</p>
 										<p class="underway-empty-state__actions">
-											<a class="button button-primary" href="<?php echo esc_url( ProviderResolver::settings_url() ); ?>">
+											<a class="button button-primary button-hero underway-onboarding__cta" href="<?php echo esc_url( ProviderResolver::settings_url() ); ?>">
 												<?php esc_html_e( 'Open connector settings', 'underway' ); ?>
 												<span class="dashicons dashicons-external" aria-hidden="true"></span>
 											</a>
