@@ -160,9 +160,7 @@ final class DashboardWidget
         $available = array_values(array_filter($allDrafts, fn($d) => ! isset($dismissed[$d->id])));
 
         if ($available === []) {
-            return '<p class="ds-empty">'
-                . esc_html__('Nothing hiding in your draft pile. Nice work.', 'draft-sweeper')
-                . '</p>';
+            return self::renderEmptyMarkup();
         }
 
         $calc = $this->plugin->calculator();
@@ -204,9 +202,25 @@ final class DashboardWidget
 
     private function renderEmpty(): string
     {
-        return '<p class="ds-empty">'
-            . esc_html__('Nothing hiding in your draft pile. Nice work.', 'draft-sweeper')
-            . '</p>';
+        return self::renderEmptyMarkup();
+    }
+
+    /**
+     * Calm shared empty-state component. Used when there are no drafts to
+     * surface. Surface widgets like this one don't include a CTA — drafts
+     * appear here naturally as the user keeps writing.
+     */
+    private static function renderEmptyMarkup(): string
+    {
+        $title = esc_html__('All caught up.', 'draft-sweeper');
+        $desc  = esc_html__("Drafts you start later will show up here, ranked by how close they are to publishable.", 'draft-sweeper');
+        return '<div class="underway-widget-empty">'
+            . '<span class="underway-widget-empty__icon" aria-hidden="true">'
+            . '<span class="dashicons dashicons-edit-large"></span>'
+            . '</span>'
+            . '<p class="underway-widget-empty__title">' . $title . '</p>'
+            . '<p class="underway-widget-empty__desc">' . $desc . '</p>'
+            . '</div>';
     }
 
     /**

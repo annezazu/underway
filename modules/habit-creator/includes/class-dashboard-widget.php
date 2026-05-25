@@ -219,17 +219,15 @@ final class Dashboard_Widget {
 	 */
 	private static function render_empty_state(): void {
 		?>
-		<div class="habit-creator-empty-card">
-			<p class="habit-creator-empty-lead">
-				<strong><?php esc_html_e( 'Surfaces streaks to help create a blogging habit.', 'habit-creator' ); ?></strong>
+		<div class="underway-widget-empty">
+			<span class="underway-widget-empty__icon" aria-hidden="true">
+				<span class="dashicons dashicons-chart-line"></span>
+			</span>
+			<p class="underway-widget-empty__title">
+				<?php esc_html_e( 'No patterns yet.', 'habit-creator' ); ?>
 			</p>
-			<p class="habit-creator-empty">
-				<?php esc_html_e( 'Suggestions will appear once more posts have been created.', 'habit-creator' ); ?>
-			</p>
-			<p class="habit-creator-empty-actions">
-				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'post-new.php' ) ); ?>">
-					<?php esc_html_e( 'Create post', 'habit-creator' ); ?>
-				</a>
+			<p class="underway-widget-empty__desc">
+				<?php esc_html_e( "After a few more posts, Habit Creator will start spotting recurring topics or rhythms you can lean into.", 'habit-creator' ); ?>
 			</p>
 		</div>
 		<?php
