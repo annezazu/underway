@@ -84,7 +84,7 @@ final class DraftSweeperModule extends AbstractModule {
 			],
 			'mix' => [
 				'label'   => __( 'A mix of all three', 'underway' ),
-				'desc'    => __( 'Balance completeness, recency, and topical fit.', 'underway' ),
+				'desc'    => __( 'Balance completeness, recency, and theme.', 'underway' ),
 				'weights' => [ 0.5, 0.2, 0.3 ],
 			],
 		];
