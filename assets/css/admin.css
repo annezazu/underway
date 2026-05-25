@@ -571,10 +571,10 @@
 }
 
 .underway-module-options__body {
-	padding: 16px 20px 18px;
+	padding: 20px 22px 24px;
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: 28px;
 }
 
 .underway-module-options__body .form-table th {
@@ -585,24 +585,33 @@
 .underway-field-group {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 14px;
 }
 
 .underway-field-group__label {
 	font-weight: 600;
 	color: var(--uw-fg);
 	font-size: 14px;
+	display: block;
 }
 
 .underway-field-group select {
 	max-width: 320px;
 }
 
+/* Draft Sweeper settings layout — gives the preset grid and custom-weights
+   panel room to breathe instead of stacking flush together. */
+.underway-ds-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
 /* Preset radio cards */
 .underway-preset-list {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-	gap: 10px;
+	gap: 12px;
 }
 
 .underway-preset {
@@ -703,53 +712,57 @@
 	border: 1px solid var(--uw-stroke);
 	border-radius: var(--wpds-border-radius-md, 8px);
 	background: color-mix(in srgb, var(--uw-stroke) 14%, #fff);
+	padding: 20px 22px 22px;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
 }
 
 .underway-advanced__header {
-	padding: 12px 14px 0;
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	gap: 4px;
 }
 
 .underway-advanced__header strong {
-	font-size: 13.5px;
+	font-size: 15px;
 	color: var(--uw-fg);
 }
 
 .underway-advanced__desc {
 	color: var(--uw-fg-muted);
-	font-size: 13px;
+	font-size: 13.5px;
 	line-height: 1.5;
 }
 
 .underway-advanced__grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-	gap: 12px;
-	padding: 12px 14px;
+	gap: 18px;
 }
 
 .underway-advanced__grid label {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 6px;
 	font-size: 13px;
 	color: var(--uw-fg);
 }
 
 .underway-advanced__grid label span {
 	font-weight: 600;
+	font-size: 13.5px;
 }
 
 .underway-advanced__grid input[type="number"] {
-	max-width: 100px;
+	max-width: 120px;
+	padding: 6px 8px;
 }
 
 .underway-advanced__hint {
 	color: var(--uw-fg-muted);
 	font-size: 12.5px;
-	margin: 0 14px 12px;
+	margin: 0;
 	font-style: italic;
 }
 

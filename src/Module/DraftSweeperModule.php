@@ -150,9 +150,9 @@ final class DraftSweeperModule extends AbstractModule {
 
 		<div class="underway-advanced">
 			<div class="underway-advanced__header">
-				<strong><?php esc_html_e( 'Custom weights', 'underway' ); ?></strong>
+				<strong><?php esc_html_e( 'Set your weighting', 'underway' ); ?></strong>
 				<span class="underway-advanced__desc">
-					<?php esc_html_e( 'Fine-tune the three signals Draft Sweeper uses.', 'underway' ); ?>
+					<?php esc_html_e( 'Fine-tune the three signals Draft Sweeper uses to rank drafts.', 'underway' ); ?>
 				</span>
 			</div>
 			<div class="underway-advanced__grid">
