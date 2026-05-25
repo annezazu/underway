@@ -114,7 +114,7 @@ final class SettingsPage {
 					<input type="hidden" name="action" value="underway_save_settings" />
 
 					<section class="underway-section">
-						<h2 class="underway-section__title"><?php esc_html_e( 'Active Widgets', 'underway' ); ?></h2>
+						<h2 class="underway-section__title"><?php esc_html_e( 'Widgets', 'underway' ); ?></h2>
 						<p class="underway-section__desc"><?php esc_html_e( 'Pick which dashboard widgets are active on this site.', 'underway' ); ?></p>
 
 						<div class="underway-cards">
