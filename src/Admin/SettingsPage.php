@@ -114,7 +114,7 @@ final class SettingsPage {
 					<input type="hidden" name="action" value="underway_save_settings" />
 
 					<section class="underway-section">
-						<h2 class="underway-section__title"><?php esc_html_e( 'Widgets', 'underway' ); ?></h2>
+						<h2 class="underway-section__title"><?php esc_html_e( 'Active Widgets', 'underway' ); ?></h2>
 						<p class="underway-section__desc"><?php esc_html_e( 'Pick which dashboard widgets are active on this site.', 'underway' ); ?></p>
 
 						<div class="underway-cards">
@@ -151,7 +151,7 @@ final class SettingsPage {
 
 					<?php if ( $has_ai_mod ) : ?>
 						<section class="underway-section">
-							<h2 class="underway-section__title"><?php esc_html_e( 'AI enhancements', 'underway' ); ?></h2>
+							<h2 class="underway-section__title"><?php esc_html_e( 'AI options', 'underway' ); ?></h2>
 							<p class="underway-section__desc">
 								<?php esc_html_e( 'AI is optional. Every widget works without it; connect a provider to unlock extras like draft summaries and writing prompts.', 'underway' ); ?>
 							</p>
@@ -239,7 +239,7 @@ final class SettingsPage {
 					if ( $module_panels ) :
 					?>
 						<section class="underway-section">
-							<h2 class="underway-section__title"><?php esc_html_e( 'Widget options', 'underway' ); ?></h2>
+							<h2 class="underway-section__title"><?php esc_html_e( 'Settings', 'underway' ); ?></h2>
 							<p class="underway-section__desc"><?php esc_html_e( 'Tune behavior for individual widgets.', 'underway' ); ?></p>
 
 							<?php foreach ( $module_panels as $panel ) : ?>
