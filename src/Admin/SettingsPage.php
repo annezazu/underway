@@ -153,7 +153,7 @@ final class SettingsPage {
 						<section class="underway-section">
 							<h2 class="underway-section__title"><?php esc_html_e( 'AI options', 'underway' ); ?></h2>
 							<p class="underway-section__desc">
-								<?php esc_html_e( 'AI is optional. Every widget works without it; connect a provider to unlock extras like draft summaries and writing prompts.', 'underway' ); ?>
+								<?php esc_html_e( 'AI is optional. Every widget works without it; connect a provider if you want a short summary on Draft Sweeper items or starter questions when Habit Creator drafts a post.', 'underway' ); ?>
 							</p>
 
 							<?php if ( ! $has_provider ) : ?>
@@ -166,7 +166,7 @@ final class SettingsPage {
 											<?php esc_html_e( 'No AI provider connected yet', 'underway' ); ?>
 										</h3>
 										<p class="underway-empty-state__desc">
-											<?php esc_html_e( 'AI-enhanced widgets are working today without AI. Connect a provider through the WordPress Connectors API to unlock draft summaries (Draft Sweeper) and writing prompts (Habit Creator).', 'underway' ); ?>
+											<?php esc_html_e( 'No AI provider is connected. Connect one if you\'d like Draft Sweeper to add short summaries to surfaced drafts, or Habit Creator to suggest starter questions for new drafts. They\'re useful either way.', 'underway' ); ?>
 										</p>
 										<p class="underway-empty-state__actions">
 											<a class="button button-secondary button-hero underway-onboarding__cta" href="<?php echo esc_url( ProviderResolver::settings_url() ); ?>">
