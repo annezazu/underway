@@ -571,11 +571,196 @@
 }
 
 .underway-module-options__body {
-	padding: 6px 20px 12px;
+	padding: 16px 20px 18px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }
 
 .underway-module-options__body .form-table th {
 	padding-left: 0;
+}
+
+/* Field group used inside per-widget settings */
+.underway-field-group {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.underway-field-group__label {
+	font-weight: 600;
+	color: var(--uw-fg);
+	font-size: 14px;
+}
+
+.underway-field-group select {
+	max-width: 320px;
+}
+
+/* Preset radio cards */
+.underway-preset-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 10px;
+}
+
+.underway-preset {
+	position: relative;
+	display: grid;
+	grid-template-columns: 24px 1fr;
+	align-items: start;
+	gap: 12px;
+	padding: 14px 16px;
+	background: var(--uw-surface);
+	border: 1px solid var(--uw-stroke);
+	border-radius: var(--wpds-border-radius-md, 8px);
+	cursor: pointer;
+	transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.underway-preset:hover {
+	border-color: color-mix(in srgb, var(--uw-accent) 40%, var(--uw-stroke));
+}
+
+.underway-preset input[type="radio"] {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+	margin: 0;
+}
+
+.underway-preset__check {
+	width: 18px;
+	height: 18px;
+	border-radius: 999px;
+	border: 1.5px solid color-mix(in srgb, var(--uw-stroke) 60%, var(--uw-fg-muted));
+	background: #fff;
+	margin-top: 2px;
+	flex: none;
+	transition: border-color 150ms ease, background-color 150ms ease;
+	position: relative;
+}
+
+.underway-preset:has(input:checked) {
+	border-color: var(--uw-accent);
+	background: var(--uw-accent-soft);
+	box-shadow: 0 0 0 1px var(--uw-accent);
+}
+
+.underway-preset:has(input:checked) .underway-preset__check {
+	border-color: var(--uw-accent);
+	background: #fff;
+}
+
+.underway-preset:has(input:checked) .underway-preset__check::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 10px;
+	height: 10px;
+	border-radius: 999px;
+	background: var(--uw-accent);
+	transform: translate(-50%, -50%);
+}
+
+.underway-preset:focus-within {
+	outline: 2px solid var(--wpds-color-stroke-focus-brand, var(--uw-accent));
+	outline-offset: 2px;
+}
+
+.underway-preset__body {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+
+.underway-preset__title {
+	font-weight: 600;
+	color: var(--uw-fg);
+	font-size: 14px;
+	line-height: 1.3;
+}
+
+.underway-preset__desc {
+	color: var(--uw-fg-muted);
+	font-size: 13px;
+	line-height: 1.45;
+}
+
+/* Advanced disclosure */
+.underway-advanced {
+	border: 1px solid var(--uw-stroke);
+	border-radius: var(--wpds-border-radius-md, 8px);
+	background: color-mix(in srgb, var(--uw-stroke) 14%, #fff);
+}
+
+.underway-advanced > summary {
+	cursor: pointer;
+	padding: 10px 14px;
+	font-weight: 600;
+	color: var(--uw-fg);
+	font-size: 13.5px;
+	list-style: none;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.underway-advanced > summary::-webkit-details-marker { display: none; }
+
+.underway-advanced > summary::before {
+	content: "▸";
+	font-size: 10px;
+	color: var(--uw-fg-muted);
+	transition: transform 150ms ease;
+}
+
+.underway-advanced[open] > summary::before {
+	transform: rotate(90deg);
+}
+
+.underway-advanced[open] > summary {
+	border-bottom: 1px solid var(--uw-stroke);
+}
+
+.underway-advanced__desc {
+	color: var(--uw-fg-muted);
+	font-size: 13px;
+	line-height: 1.5;
+	margin: 12px 14px 0;
+}
+
+.underway-advanced__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+	padding: 12px 14px;
+}
+
+.underway-advanced__grid label {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	font-size: 13px;
+	color: var(--uw-fg);
+}
+
+.underway-advanced__grid label span {
+	font-weight: 600;
+}
+
+.underway-advanced__grid input[type="number"] {
+	max-width: 100px;
+}
+
+.underway-advanced__hint {
+	color: var(--uw-fg-muted);
+	font-size: 12.5px;
+	margin: 0 14px 12px;
+	font-style: italic;
 }
 
 /* Success banner after save */
