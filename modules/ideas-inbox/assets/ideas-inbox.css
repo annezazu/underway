@@ -121,11 +121,11 @@
 }
 
 .ideas-inbox__row-text:hover {
-	color: var( --wpds-color-fg-content-link, #2271b1 );
+	color: var( --wp-admin-theme-color, var( --wpds-color-fg-content-link, #2271b1 ) );
 }
 
 .ideas-inbox__row-text:focus-visible {
-	outline: 2px solid var( --wpds-color-stroke-focus, #2271b1 );
+	outline: 2px solid var( --wp-admin-theme-color, var( --wpds-color-stroke-focus, #2271b1 ) );
 	outline-offset: 2px;
 	border-radius: var( --wpds-border-radius-sm, 2px );
 }
