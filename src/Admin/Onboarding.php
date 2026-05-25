@@ -99,7 +99,7 @@ final class Onboarding {
 					<div class="underway-onboarding__hero-inner">
 						<div class="underway-onboarding__eyebrow">
 							<span class="underway-onboarding__logo" aria-hidden="true">
-								<svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+								<svg width="17" height="17" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
 									<!-- mast -->
 									<path d="M10 3 L10 11.5" />
 									<!-- sail -->

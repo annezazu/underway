@@ -77,7 +77,7 @@ final class DashboardBadge {
 	private static function badge_html(): string {
 		$tooltip = esc_attr__( 'Part of Underway', 'underway' );
 		return '<span class="underway-widget-badge" aria-label="' . $tooltip . '" title="' . $tooltip . '">'
-			. '<svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'
+			. '<svg width="17" height="17" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'
 			. '<path d="M10 3 L10 11.5" />'
 			. '<path d="M10 3.6 L14.6 11.2 L10 11.2 Z" fill="currentColor" stroke="none" />'
 			. '<path d="M4 12.5 L16 12.5 L14.2 15.5 L5.8 15.5 Z" fill="currentColor" stroke="none" />'
