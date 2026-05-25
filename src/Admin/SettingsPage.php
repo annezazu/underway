@@ -77,7 +77,7 @@ final class SettingsPage {
 			'ideas-inbox'   => 'lightbulb',
 			'habit-creator' => 'chart-line',
 		];
-		$updated = filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN );
+		$updated = filter_input( INPUT_GET, 'underway_saved', FILTER_VALIDATE_BOOLEAN );
 		?>
 		<div class="underway-onboarding-wrap underway-settings-wrap">
 			<div class="underway-onboarding">
@@ -344,7 +344,7 @@ final class SettingsPage {
 			}
 		}
 
-		wp_safe_redirect( add_query_arg( [ 'updated' => 1 ], admin_url( 'options-general.php?page=' . self::PAGE_SLUG ) ) );
+		wp_safe_redirect( add_query_arg( [ 'underway_saved' => 1 ], admin_url( 'options-general.php?page=' . self::PAGE_SLUG ) ) );
 		exit;
 	}
 }
