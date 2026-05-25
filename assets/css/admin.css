@@ -391,7 +391,7 @@
 .underway-panel__row-label {
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	gap: 6px; /* matches title→description rhythm used elsewhere */
 }
 
 .underway-panel__row-label strong {
@@ -571,11 +571,203 @@
 }
 
 .underway-module-options__body {
-	padding: 6px 20px 12px;
+	padding: 20px 22px 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
 }
 
 .underway-module-options__body .form-table th {
 	padding-left: 0;
+}
+
+/* Field group used inside per-widget settings.
+ * Consistent label→control spacing: 10px between a heading label and its form
+ * control (dropdowns, inputs, etc.). Section-level gaps are controlled by the
+ * parent (`.underway-module-options__body` uses 28px between sections).
+ */
+.underway-field-group {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.underway-field-group__label {
+	font-weight: 600;
+	color: var(--uw-fg);
+	font-size: 14px;
+	display: block;
+}
+
+.underway-field-group select {
+	max-width: 320px;
+}
+
+/* Draft Sweeper settings layout — gives the preset grid and custom-weights
+   panel room to breathe instead of stacking flush together. */
+.underway-ds-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+/* Preset radio cards */
+.underway-preset-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 12px;
+}
+
+.underway-preset {
+	position: relative;
+	display: grid;
+	grid-template-columns: 24px 1fr;
+	align-items: start;
+	gap: 12px;
+	padding: 14px 16px;
+	background: var(--uw-surface);
+	border: 1px solid var(--uw-stroke);
+	border-radius: var(--wpds-border-radius-md, 8px);
+	cursor: pointer;
+	transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.underway-preset:hover {
+	border-color: color-mix(in srgb, var(--uw-accent) 40%, var(--uw-stroke));
+}
+
+.underway-preset input[type="radio"] {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+	margin: 0;
+}
+
+.underway-preset__check {
+	width: 18px;
+	height: 18px;
+	border-radius: 999px;
+	border: 1.5px solid color-mix(in srgb, var(--uw-stroke) 60%, var(--uw-fg-muted));
+	background: #fff;
+	margin-top: 2px;
+	flex: none;
+	transition: border-color 150ms ease, background-color 150ms ease;
+	position: relative;
+}
+
+.underway-preset:has(input:checked) {
+	border-color: var(--uw-accent);
+	background: var(--uw-accent-soft);
+	box-shadow: 0 0 0 1px var(--uw-accent);
+}
+
+.underway-preset:has(input:checked) .underway-preset__check {
+	border-color: var(--uw-accent);
+	background: #fff;
+}
+
+.underway-preset:has(input:checked) .underway-preset__check::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 10px;
+	height: 10px;
+	border-radius: 999px;
+	background: var(--uw-accent);
+	transform: translate(-50%, -50%);
+}
+
+.underway-preset:focus-within {
+	outline: 2px solid var(--wpds-color-stroke-focus-brand, var(--uw-accent));
+	outline-offset: 2px;
+}
+
+.underway-preset__body {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	min-width: 0;
+}
+
+.underway-preset__title {
+	font-weight: 600;
+	color: var(--uw-fg);
+	font-size: 14px;
+	line-height: 1.3;
+}
+
+.underway-preset__desc {
+	color: var(--uw-fg-muted);
+	font-size: 13px;
+	line-height: 1.45;
+}
+
+/* Custom-weights panel — revealed only when the Custom mix preset is selected */
+.underway-ds-settings .underway-advanced {
+	display: none;
+}
+
+.underway-ds-settings:has(input[type="radio"][value="custom"]:checked) .underway-advanced {
+	display: block;
+}
+
+.underway-advanced {
+	border: 1px solid var(--uw-stroke);
+	border-radius: var(--wpds-border-radius-md, 8px);
+	background: color-mix(in srgb, var(--uw-stroke) 14%, #fff);
+	padding: 22px 24px 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 22px;
+}
+
+.underway-advanced__header {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.underway-advanced__header strong {
+	font-size: 15px;
+	color: var(--uw-fg);
+}
+
+.underway-advanced__desc {
+	color: var(--uw-fg-muted);
+	font-size: 13.5px;
+	line-height: 1.5;
+}
+
+.underway-advanced__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 20px;
+}
+
+.underway-advanced__grid label {
+	display: flex;
+	flex-direction: column;
+	gap: 10px; /* matches .underway-field-group: label → control */
+	font-size: 13px;
+	color: var(--uw-fg);
+}
+
+.underway-advanced__grid label span {
+	font-weight: 600;
+	font-size: 13.5px;
+}
+
+.underway-advanced__grid input[type="number"] {
+	max-width: 120px;
+	padding: 6px 8px;
+}
+
+.underway-advanced__hint {
+	color: var(--uw-fg-muted);
+	font-size: 12.5px;
+	margin: 0;
+	font-style: italic;
 }
 
 /* Success banner after save */
