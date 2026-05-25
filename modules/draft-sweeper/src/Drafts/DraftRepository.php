@@ -65,6 +65,13 @@ final class DraftRepository
             $title = $post->post_title;
             $content = strip_shortcodes(wp_strip_all_tags($post->post_content));
 
+            // Skip drafts that are functionally empty — no title AND no body.
+            // Surfacing them shows only "Untitled post" with no other context,
+            // which reads as a broken widget rather than a useful nudge.
+            if (trim($title) === '' && trim($content) === '') {
+                continue;
+            }
+
             $out[] = new DraftSnapshot(
                 id: $post->ID,
                 title: $title !== '' ? $title : __('(no title)', 'draft-sweeper'),
