@@ -391,7 +391,7 @@
 .underway-panel__row-label {
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	gap: 6px; /* matches title→description rhythm used elsewhere */
 }
 
 .underway-panel__row-label strong {
@@ -581,11 +581,15 @@
 	padding-left: 0;
 }
 
-/* Field group used inside per-widget settings */
+/* Field group used inside per-widget settings.
+ * Consistent label→control spacing: 10px between a heading label and its form
+ * control (dropdowns, inputs, etc.). Section-level gaps are controlled by the
+ * parent (`.underway-module-options__body` uses 28px between sections).
+ */
 .underway-field-group {
 	display: flex;
 	flex-direction: column;
-	gap: 14px;
+	gap: 10px;
 }
 
 .underway-field-group__label {
@@ -682,7 +686,7 @@
 .underway-preset__body {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 6px;
 	min-width: 0;
 }
 
@@ -712,16 +716,16 @@
 	border: 1px solid var(--uw-stroke);
 	border-radius: var(--wpds-border-radius-md, 8px);
 	background: color-mix(in srgb, var(--uw-stroke) 14%, #fff);
-	padding: 20px 22px 22px;
+	padding: 22px 24px 24px;
 	display: flex;
 	flex-direction: column;
-	gap: 18px;
+	gap: 22px;
 }
 
 .underway-advanced__header {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 6px;
 }
 
 .underway-advanced__header strong {
@@ -738,13 +742,13 @@
 .underway-advanced__grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-	gap: 18px;
+	gap: 20px;
 }
 
 .underway-advanced__grid label {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
+	gap: 10px; /* matches .underway-field-group: label → control */
 	font-size: 13px;
 	color: var(--uw-fg);
 }
