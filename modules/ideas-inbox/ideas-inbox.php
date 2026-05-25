@@ -147,15 +147,9 @@ function ideas_inbox_render_widget() {
 		</form>
 
 		<?php if ( 0 === $total ) : ?>
-			<div class="ideas-inbox__empty">
-				<span class="dashicons dashicons-lightbulb" aria-hidden="true"></span>
-				<p class="ideas-inbox__empty-title">
-					<?php esc_html_e( 'No ideas yet', 'ideas-dashboard-widget' ); ?>
-				</p>
-				<p class="ideas-inbox__empty-hint">
-					<?php esc_html_e( 'Drop one above to save it for later.', 'ideas-dashboard-widget' ); ?>
-				</p>
-			</div>
+			<p class="ideas-inbox__empty-line">
+				<?php esc_html_e( 'No ideas saved yet.', 'ideas-dashboard-widget' ); ?>
+			</p>
 		<?php else : ?>
 			<div class="ideas-inbox__header">
 				<span class="ideas-inbox__count">

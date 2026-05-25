@@ -249,6 +249,18 @@
 	font-size: var( --wpds-typography-font-size-xs, 12px );
 }
 
+/* Compact "no ideas saved yet" line shown beneath the input when the list
+ * is empty. Replaces the old full-card empty illustration in the widget
+ * context — the input above already invites action, so a quieter status
+ * line is enough. */
+
+.ideas-inbox__empty-line {
+	margin: 6px 0 0;
+	color: #50575e;
+	font-size: 13px;
+	text-align: center;
+}
+
 /* Inline error notice shown when a REST call fails. */
 
 .ideas-inbox__notice {
