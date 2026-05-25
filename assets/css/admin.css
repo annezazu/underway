@@ -467,8 +467,9 @@
 	gap: 20px;
 	padding: 24px;
 	background: var(--uw-surface);
-	border: 1px dashed color-mix(in srgb, var(--uw-accent) 35%, var(--uw-stroke));
+	border: 1px solid var(--uw-stroke);
 	border-radius: var(--uw-radius-card);
+	box-shadow: 0 1px 1px rgba(0,0,0,0.02);
 }
 
 .underway-empty-state__icon {
