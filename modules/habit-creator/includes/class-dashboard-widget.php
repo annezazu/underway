@@ -357,10 +357,16 @@ final class Dashboard_Widget {
 		}
 		$on = isset( $_POST['enabled'] ) && (string) $_POST['enabled'] === '1';
 		if ( defined( 'UNDERWAY_BUNDLED' ) ) {
-			$ai = (array) get_option( 'underway_ai', [] );
+			$ai      = (array) get_option( 'underway_ai', [] );
 			$modules = (array) ( $ai['modules'] ?? [] );
 			$modules['habit-creator'] = $on;
-			$ai['modules'] = $modules;
+			$ai['modules']            = $modules;
+			// Auto-flip the master on so the per-widget toggle has an effect;
+			// without this the user toggles "Use AI" on the widget but nothing
+			// happens because the global gate is still off.
+			if ( $on && empty( $ai['master'] ) ) {
+				$ai['master'] = true;
+			}
 			update_option( 'underway_ai', $ai, false );
 		} else {
 			update_option( Settings::OPTION_USE_AI, $on ? '1' : '0' );
