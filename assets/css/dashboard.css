@@ -2,6 +2,12 @@
  * widget title so it's obvious at a glance that these come from one plugin.
  */
 
+.underway-widget-title {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
 .underway-widget-badge {
 	display: inline-flex;
 	align-items: center;
@@ -11,8 +17,6 @@
 	border-radius: 999px;
 	background: var(--wp-admin-theme-color, #2271b1);
 	color: #fff;
-	margin-left: 4px;
-	vertical-align: -5px; /* nudge SVG center onto the text baseline */
 	flex: none;
 }
 

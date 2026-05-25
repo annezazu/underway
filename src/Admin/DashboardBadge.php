@@ -61,7 +61,10 @@ final class DashboardBadge {
 						continue;
 					}
 					$wp_meta_boxes['dashboard'][ $context ][ $priority ][ $id ]['title'] =
-						'<span class="underway-widget-title__label">' . $box['title'] . '</span>' . self::badge_html();
+						'<span class="underway-widget-title">'
+						. '<span class="underway-widget-title__label">' . $box['title'] . '</span>'
+						. self::badge_html()
+						. '</span>';
 				}
 			}
 		}
