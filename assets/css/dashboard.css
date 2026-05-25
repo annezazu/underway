@@ -50,21 +50,17 @@
 }
 
 .underway-widget-empty__icon {
-	width: 40px;
-	height: 40px;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	color: #8c8f94;
-	background: #f0f0f1;
-	border-radius: 999px;
-	margin-bottom: 2px;
+	margin-bottom: 4px;
 }
 
 .underway-widget-empty__icon .dashicons {
-	font-size: 22px;
-	width: 22px;
-	height: 22px;
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
 }
 
 .underway-widget-empty__title {

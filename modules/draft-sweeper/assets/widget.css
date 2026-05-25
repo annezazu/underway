@@ -5,7 +5,7 @@
   --ds-text: #1d2327;
   --ds-text-secondary: #50575e;
   --ds-text-soft: #787c82;
-  --ds-paper: #f6f7f7;
+  --ds-paper: #fff;
   --ds-accent: var(--wp-admin-theme-color, #2271b1);
   position: relative;
   color: var(--ds-text);
