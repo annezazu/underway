@@ -690,47 +690,37 @@
 	line-height: 1.45;
 }
 
-/* Advanced disclosure */
+/* Custom-weights panel — revealed only when the Custom mix preset is selected */
+.underway-ds-settings .underway-advanced {
+	display: none;
+}
+
+.underway-ds-settings:has(input[type="radio"][value="custom"]:checked) .underway-advanced {
+	display: block;
+}
+
 .underway-advanced {
 	border: 1px solid var(--uw-stroke);
 	border-radius: var(--wpds-border-radius-md, 8px);
 	background: color-mix(in srgb, var(--uw-stroke) 14%, #fff);
 }
 
-.underway-advanced > summary {
-	cursor: pointer;
-	padding: 10px 14px;
-	font-weight: 600;
-	color: var(--uw-fg);
-	font-size: 13.5px;
-	list-style: none;
+.underway-advanced__header {
+	padding: 12px 14px 0;
 	display: flex;
-	align-items: center;
-	gap: 6px;
+	flex-direction: column;
+	gap: 2px;
 }
 
-.underway-advanced > summary::-webkit-details-marker { display: none; }
-
-.underway-advanced > summary::before {
-	content: "▸";
-	font-size: 10px;
-	color: var(--uw-fg-muted);
-	transition: transform 150ms ease;
-}
-
-.underway-advanced[open] > summary::before {
-	transform: rotate(90deg);
-}
-
-.underway-advanced[open] > summary {
-	border-bottom: 1px solid var(--uw-stroke);
+.underway-advanced__header strong {
+	font-size: 13.5px;
+	color: var(--uw-fg);
 }
 
 .underway-advanced__desc {
 	color: var(--uw-fg-muted);
 	font-size: 13px;
 	line-height: 1.5;
-	margin: 12px 14px 0;
 }
 
 .underway-advanced__grid {

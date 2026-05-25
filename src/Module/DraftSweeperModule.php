@@ -115,6 +115,7 @@ final class DraftSweeperModule extends AbstractModule {
 			: $this->detect_preset( $completeness, $recency, $relevance );
 		$presets      = $this->presets();
 		?>
+		<div class="underway-ds-settings">
 		<div class="underway-field-group">
 			<label class="underway-field-group__label" for="ds-scope"><?php esc_html_e( 'Drafts to surface', 'underway' ); ?></label>
 			<select id="ds-scope" name="module_settings[draft-sweeper][scope]">
@@ -147,11 +148,13 @@ final class DraftSweeperModule extends AbstractModule {
 			</div>
 		</div>
 
-		<details class="underway-advanced"<?php echo $current === 'custom' ? ' open' : ''; ?>>
-			<summary><?php esc_html_e( 'Advanced weights', 'underway' ); ?></summary>
-			<p class="underway-advanced__desc">
-				<?php esc_html_e( 'Fine-tune the three signals Draft Sweeper uses. Saving applies these only when "Custom mix" is selected; otherwise the chosen preset wins.', 'underway' ); ?>
-			</p>
+		<div class="underway-advanced">
+			<div class="underway-advanced__header">
+				<strong><?php esc_html_e( 'Custom weights', 'underway' ); ?></strong>
+				<span class="underway-advanced__desc">
+					<?php esc_html_e( 'Fine-tune the three signals Draft Sweeper uses.', 'underway' ); ?>
+				</span>
+			</div>
 			<div class="underway-advanced__grid">
 				<label>
 					<span><?php esc_html_e( 'Completeness', 'underway' ); ?></span>
@@ -167,7 +170,8 @@ final class DraftSweeperModule extends AbstractModule {
 				</label>
 			</div>
 			<p class="underway-advanced__hint"><?php esc_html_e( 'Values are normalized to sum to 1 on save.', 'underway' ); ?></p>
-		</details>
+		</div>
+		</div>
 		<?php
 	}
 
