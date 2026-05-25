@@ -126,9 +126,16 @@
 	}
 
 	function buildEmptyState( container ) {
-		var hint = isWidgetContainer( container )
-			? __( 'Drop one above to save it for later.', 'ideas-dashboard-widget' )
-			: __( 'Head to your dashboard to add one.', 'ideas-dashboard-widget' );
+		// Widget: minimal single-line empty marker (matches the PHP render).
+		if ( isWidgetContainer( container ) ) {
+			return (
+				'<p class="ideas-inbox__empty-line">'
+				+ escapeHtml( __( 'No ideas saved yet.', 'ideas-dashboard-widget' ) )
+				+ '</p>'
+			);
+		}
+		// Admin page: keeps the full bulb-illustration empty state.
+		var hint = __( 'Head to your dashboard to add one.', 'ideas-dashboard-widget' );
 		return (
 			'<div class="ideas-inbox__empty">'
 			+ '<span class="dashicons dashicons-lightbulb" aria-hidden="true"></span>'
@@ -239,7 +246,7 @@
 	function onAddSuccess( container, res ) {
 		clearError( container );
 
-		var empty = container.querySelector( '.ideas-inbox__empty' );
+		var empty = container.querySelector( '.ideas-inbox__empty, .ideas-inbox__empty-line' );
 		if ( empty ) {
 			empty.outerHTML = buildHeaderAndList( res.total );
 		}
