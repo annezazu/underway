@@ -227,7 +227,7 @@ final class Dashboard_Widget {
 				<?php esc_html_e( 'No patterns yet.', 'habit-creator' ); ?>
 			</p>
 			<p class="underway-widget-empty__desc">
-				<?php esc_html_e( "After a few more posts, Habit Creator will start spotting recurring topics or rhythms you can lean into.", 'habit-creator' ); ?>
+				<?php esc_html_e( 'As you write posts, Habit Creator will surface recurring topics or rhythms you can lean into.', 'habit-creator' ); ?>
 			</p>
 		</div>
 		<?php

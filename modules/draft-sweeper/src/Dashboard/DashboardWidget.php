@@ -213,7 +213,7 @@ final class DashboardWidget
     private static function renderEmptyMarkup(): string
     {
         $title = esc_html__('All caught up.', 'draft-sweeper');
-        $desc  = esc_html__("Drafts you start later will show up here, ranked by how close they are to publishable.", 'draft-sweeper');
+        $desc  = esc_html__("Drafts you previously started will show up here, surfaced based on what you want.", 'draft-sweeper');
         return '<div class="underway-widget-empty">'
             . '<span class="underway-widget-empty__icon" aria-hidden="true">'
             . '<span class="dashicons dashicons-edit-large"></span>'

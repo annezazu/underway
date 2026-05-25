@@ -66,7 +66,7 @@ final class Widget
         wp_localize_script(self::HANDLE, 'futureDrafts', [
             'restNamespace' => Controller::NAMESPACE,
             'today'         => wp_date('Y-m-d'),
-            'subtitle'      => __("Create a draft for your future self. We'll bring it back when you're ready to finish writing.", 'future-drafts'),
+            'subtitle'      => __("Create a draft for your future self. We'll bring it back when you're ready.", 'future-drafts'),
         ]);
 
         wp_set_script_translations(self::HANDLE, 'future-drafts');
