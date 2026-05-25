@@ -41,13 +41,17 @@ final class Activation {
 		}
 
 		if ( get_option( self::OPT_AI, null ) === null ) {
+			// AI defaults OFF on fresh installs. Even if a connector is
+			// configured, the user has to opt in — we don't assume they
+			// want AI summaries / starter questions just because the
+			// underlying capability exists.
 			update_option(
 				self::OPT_AI,
 				[
-					'master'  => true,
+					'master'  => false,
 					'modules' => [
-						'draft-sweeper' => true,
-						'habit-creator' => true,
+						'draft-sweeper' => false,
+						'habit-creator' => false,
 					],
 				],
 				false
