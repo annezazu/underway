@@ -142,7 +142,7 @@ final class DraftSweeperModule extends AbstractModule {
 					<span class="underway-preset__check" aria-hidden="true"></span>
 					<span class="underway-preset__body">
 						<span class="underway-preset__title"><?php esc_html_e( 'Custom mix', 'underway' ); ?></span>
-						<span class="underway-preset__desc"><?php esc_html_e( 'Set the weights yourself in Advanced below.', 'underway' ); ?></span>
+						<span class="underway-preset__desc"><?php esc_html_e( 'Set the weights yourself.', 'underway' ); ?></span>
 					</span>
 				</label>
 			</div>
