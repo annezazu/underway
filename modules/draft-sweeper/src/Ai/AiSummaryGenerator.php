@@ -25,11 +25,6 @@ final class AiSummaryGenerator implements SummaryGenerator
 
     public function summarize(DraftSnapshot $draft): string
     {
-        $provider = $this->resolver->resolve();
-        if ($provider === null || ! class_exists('\\WordPress\\AiClient\\AiClient')) {
-            return $this->fallback->summarize($draft);
-        }
-
         $cacheKey = $this->cacheKey($draft);
         $cached = get_post_meta($draft->id, self::META_KEY, true);
         if (is_array($cached) && ($cached['key'] ?? '') === $cacheKey && is_string($cached['text'] ?? null)) {
@@ -43,20 +38,39 @@ Title: {$draft->title}
 Excerpt: {$draft->excerpt}
 PROMPT;
 
+        $text = $this->callAi($prompt);
+        if ($text === null || $text === '') {
+            return $this->fallback->summarize($draft);
+        }
+        update_post_meta($draft->id, self::META_KEY, ['key' => $cacheKey, 'text' => $text]);
+        return $text;
+    }
+
+    /**
+     * Routes through Underway's shared AI client when bundled (so the fluent
+     * `wp_ai_client_prompt()` surface is tried before the static class). Falls
+     * back to the direct static call when running standalone.
+     */
+    private function callAi(string $prompt): ?string
+    {
+        if (defined('UNDERWAY_BUNDLED') && class_exists('\\Underway\\Ai\\AiClient')) {
+            $text = \Underway\Ai\AiClient::generate_text($prompt, ['max_tokens' => 80]);
+            return $text !== null ? trim($text) : null;
+        }
+
+        $provider = $this->resolver->resolve();
+        if ($provider === null || ! class_exists('\\WordPress\\AiClient\\AiClient')) {
+            return null;
+        }
         try {
             $response = \WordPress\AiClient\AiClient::generateText([
                 'provider'   => $provider['id'],
                 'prompt'     => $prompt,
                 'max_tokens' => 80,
             ]);
-            $text = is_string($response) ? trim($response) : trim((string) ($response['text'] ?? ''));
-            if ($text === '') {
-                return $this->fallback->summarize($draft);
-            }
-            update_post_meta($draft->id, self::META_KEY, ['key' => $cacheKey, 'text' => $text]);
-            return $text;
+            return is_string($response) ? trim($response) : trim((string) ($response['text'] ?? ''));
         } catch (\Throwable) {
-            return $this->fallback->summarize($draft);
+            return null;
         }
     }
 

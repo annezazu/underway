@@ -44,38 +44,59 @@ final class AiDailyPicker
             return null;
         }
 
-        $provider = $this->resolver->resolve();
-        if ($provider === null || ! class_exists('\\WordPress\\AiClient\\AiClient') || count($candidates) === 1) {
+        // Need at least one candidate. When there's only one, AI can't
+        // "choose" between options — just return it as the pick with no nudge.
+        if (count($candidates) === 1) {
             $top = $candidates[0];
             return ['draft' => $top['draft'], 'score' => $top['score'], 'nudge' => ''];
         }
 
         $prompt = $this->buildPrompt($candidates, $recentTopicLabels);
+        $text   = $this->callAi($prompt);
 
+        if ($text !== null && $text !== '') {
+            $parsed = $this->parse($text);
+            if ($parsed !== null) {
+                foreach ($candidates as $row) {
+                    if ($row['draft']->id === $parsed['post_id']) {
+                        return ['draft' => $row['draft'], 'score' => $row['score'], 'nudge' => $parsed['nudge']];
+                    }
+                }
+            }
+        }
+
+        $top = $candidates[0];
+        return ['draft' => $top['draft'], 'score' => $top['score'], 'nudge' => ''];
+    }
+
+    /**
+     * Make the actual AI call. When bundled inside Underway, routes through
+     * Underway's shared client which tries the fluent `wp_ai_client_prompt()`
+     * helper first and falls back to the static `AiClient::generateText()`
+     * — so the call fires reliably on either AI Client surface.
+     *
+     * Falls back to a direct static call when running standalone.
+     */
+    private function callAi(string $prompt): ?string
+    {
+        if (defined('UNDERWAY_BUNDLED') && class_exists('\\Underway\\Ai\\AiClient')) {
+            return \Underway\Ai\AiClient::generate_text($prompt, ['max_tokens' => self::MAX_TOKENS]);
+        }
+
+        $provider = $this->resolver->resolve();
+        if ($provider === null || ! class_exists('\\WordPress\\AiClient\\AiClient')) {
+            return null;
+        }
         try {
             $response = \WordPress\AiClient\AiClient::generateText([
                 'provider'   => $provider['id'],
                 'prompt'     => $prompt,
                 'max_tokens' => self::MAX_TOKENS,
             ]);
-            $text = is_string($response) ? $response : (string) ($response['text'] ?? '');
-            $parsed = $this->parse($text);
-            if ($parsed === null) {
-                $top = $candidates[0];
-                return ['draft' => $top['draft'], 'score' => $top['score'], 'nudge' => ''];
-            }
-
-            foreach ($candidates as $row) {
-                if ($row['draft']->id === $parsed['post_id']) {
-                    return ['draft' => $row['draft'], 'score' => $row['score'], 'nudge' => $parsed['nudge']];
-                }
-            }
+            return is_string($response) ? $response : (string) ($response['text'] ?? '');
         } catch (\Throwable) {
-            // fall through
+            return null;
         }
-
-        $top = $candidates[0];
-        return ['draft' => $top['draft'], 'score' => $top['score'], 'nudge' => ''];
     }
 
     /**

@@ -286,13 +286,13 @@ final class DashboardWidget
                 id="ds-ai-toggle-help"
                 class="ds-ai-toggle__tooltip"
                 role="tooltip"
-                data-on="<?php esc_attr_e('AI chooses the draft and writes a one-line summary.', 'draft-sweeper'); ?>"
-                data-off="<?php esc_attr_e('Draft Sweeper picks by your settings; no AI summary.', 'draft-sweeper'); ?>"
+                data-on="<?php esc_attr_e('AI helps pick the draft; writes a summary only when the draft has no opening sentence.', 'draft-sweeper'); ?>"
+                data-off="<?php esc_attr_e('Draft Sweeper picks by your settings; no AI involvement.', 'draft-sweeper'); ?>"
             ><?php
                 echo esc_html(
                     $on
-                        ? __('AI chooses the draft and writes a one-line summary.', 'draft-sweeper')
-                        : __('Draft Sweeper picks by your settings; no AI summary.', 'draft-sweeper')
+                        ? __('AI helps pick the draft; writes a summary only when the draft has no opening sentence.', 'draft-sweeper')
+                        : __('Draft Sweeper picks by your settings; no AI involvement.', 'draft-sweeper')
                 );
             ?></span>
         </div>
