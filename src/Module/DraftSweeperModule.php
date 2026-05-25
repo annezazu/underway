@@ -79,7 +79,7 @@ final class DraftSweeperModule extends AbstractModule {
 			],
 			'theme' => [
 				'label'   => __( 'Stay on a theme', 'underway' ),
-				'desc'    => __( 'Surface drafts that match what you\'ve been writing lately.', 'underway' ),
+				'desc'    => __( 'Surface drafts that match latest writing.', 'underway' ),
 				'weights' => [ 0.1, 0.2, 0.7 ],
 			],
 			'mix' => [
