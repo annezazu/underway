@@ -66,12 +66,28 @@ final class DashboardWidget
             wp_send_json_error('forbidden', 403);
         }
         $on = isset($_POST['enabled']) && (string) $_POST['enabled'] === '1';
-        $settings = get_option('draft_sweeper_settings', []);
-        if (! is_array($settings)) {
-            $settings = [];
+
+        if (defined('UNDERWAY_BUNDLED')) {
+            // Bundled inside Underway: the per-widget AI flag lives in
+            // `underway_ai['modules']['draft-sweeper']`, not in the standalone
+            // `draft_sweeper_settings`. Also flip the master on when the user
+            // enables AI here, so the toggle actually has an effect.
+            $ai      = (array) get_option('underway_ai', []);
+            $modules = (array) ($ai['modules'] ?? []);
+            $modules['draft-sweeper'] = $on;
+            $ai['modules'] = $modules;
+            if ($on && empty($ai['master'])) {
+                $ai['master'] = true;
+            }
+            update_option('underway_ai', $ai, false);
+        } else {
+            $settings = get_option('draft_sweeper_settings', []);
+            if (! is_array($settings)) {
+                $settings = [];
+            }
+            $settings['enable_ai'] = $on;
+            update_option('draft_sweeper_settings', $settings);
         }
-        $settings['enable_ai'] = $on;
-        update_option('draft_sweeper_settings', $settings);
 
         wp_send_json_success([
             'enabled' => $on,
