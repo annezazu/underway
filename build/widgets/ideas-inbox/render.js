@@ -24,6 +24,13 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
+// vendor-external:react
+var require_react = __commonJS({
+  "vendor-external:react"(exports, module) {
+    module.exports = window.React;
+  }
+});
+
 // package-external:@wordpress/i18n
 var require_i18n = __commonJS({
   "package-external:@wordpress/i18n"(exports, module) {
@@ -38,28 +45,49 @@ var require_jsx_runtime = __commonJS({
   }
 });
 
-// widgets/ideas-inbox/render.tsx
+// widgets/_shared/widget-html.tsx
+var import_react = __toESM(require_react());
 var import_i18n = __toESM(require_i18n());
-
-// widgets/ideas-inbox/render.scss
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='7d91690693']")) {
-  const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "7d91690693");
-  style.appendChild(document.createTextNode(".underway-widget{display:flex;flex-direction:column;gap:12px}.underway-widget__lede{font-weight:500;margin:0}.underway-widget__hint{color:var(--wp--preset--color--contrast-2,#50575e);font-size:12px;margin:0}.underway-widget .components-button.is-primary{align-self:flex-start}"));
-  document.head.appendChild(style);
+var import_jsx_runtime = __toESM(require_jsx_runtime());
+function WidgetHtml({ slug }) {
+  const hostRef = (0, import_react.useRef)(null);
+  const [status, setStatus] = (0, import_react.useState)("loading");
+  (0, import_react.useEffect)(() => {
+    let cancelled = false;
+    if (!wp?.apiFetch) {
+      setStatus("error");
+      return;
+    }
+    wp.apiFetch({ path: `/underway/v1/widgets/${slug}/html` }).then((res) => {
+      if (cancelled) {
+        return;
+      }
+      if (hostRef.current && typeof res?.html === "string") {
+        hostRef.current.innerHTML = res.html;
+        setStatus("ok");
+      } else {
+        setStatus("error");
+      }
+    }).catch(() => {
+      if (!cancelled) {
+        setStatus("error");
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+    status === "loading" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: 0, color: "#50575e" }, children: (0, import_i18n.__)("Loading\xE2\xA6", "underway") }),
+    status === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: 0, color: "#b32d2e" }, children: (0, import_i18n.__)("Could not load this widget.", "underway") }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: hostRef })
+  ] });
 }
 
 // widgets/ideas-inbox/render.tsx
-var import_jsx_runtime = __toESM(require_jsx_runtime());
-function IdeasInboxWidget(_props) {
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "underway-widget", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "underway-widget__lede", children: (0, import_i18n.__)("Drop ideas for your future self to blog about.", "underway") }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "underway-widget__hint", children: (0, import_i18n.__)(
-      "Demo placeholder running in the experimental Dashboard. The full Ideas Inbox UI is being ported.",
-      "underway"
-    ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { className: "components-button is-primary", href: "edit.php?page=ideas-inbox", children: (0, import_i18n.__)("Open Ideas Inbox", "underway") })
-  ] });
+var import_jsx_runtime2 = __toESM(require_jsx_runtime());
+function IdeasInboxWidget() {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(WidgetHtml, { slug: "ideas-inbox" });
 }
 export {
   IdeasInboxWidget as default

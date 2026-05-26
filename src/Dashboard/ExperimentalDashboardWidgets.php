@@ -37,6 +37,7 @@ final class ExperimentalDashboardWidgets {
 			'dashboard-wp-admin_boot_dependencies',
 			[ self::class, 'add_modules_to_boot_dependencies' ]
 		);
+		WidgetHtmlController::register();
 	}
 
 	/**
