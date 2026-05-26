@@ -1,0 +1,1 @@
+<?php return array('dependencies' => array('wp-i18n', 'wp-icons'), 'version' => '3d200dc8a6338375b849');
