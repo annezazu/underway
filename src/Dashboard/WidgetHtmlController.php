@@ -95,6 +95,36 @@ final class WidgetHtmlController {
 				UNDERWAY_VERSION
 			);
 		}
+		// Future Drafts also needs its React bundle so the new dashboard
+		// can call window.UnderwayFutureDrafts.mount(node) after injecting
+		// the root div.
+		$fd_asset_path = UNDERWAY_DIR . '/modules/future-drafts/build/widget.asset.php';
+		if ( file_exists( UNDERWAY_DIR . '/modules/future-drafts/build/widget.js' ) ) {
+			$asset = file_exists( $fd_asset_path )
+				? require $fd_asset_path
+				: [ 'dependencies' => [ 'wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n' ], 'version' => UNDERWAY_VERSION ];
+			wp_enqueue_script(
+				'underway-future-drafts-classic',
+				$plugin_url . 'modules/future-drafts/build/widget.js',
+				$asset['dependencies'],
+				$asset['version'],
+				true
+			);
+			// Mirror the localize that the classic widget does so the
+			// React app can read its bootstrap config.
+			$rest_ns = class_exists( '\FutureDrafts\Rest\Controller' )
+				? \FutureDrafts\Rest\Controller::NAMESPACE
+				: 'future-drafts/v1';
+			wp_localize_script(
+				'underway-future-drafts-classic',
+				'futureDrafts',
+				[
+					'restNamespace' => $rest_ns,
+					'today'         => wp_date( 'Y-m-d' ),
+					'subtitle'      => __( "Create a draft for your future self. We'll bring it back when you're ready.", 'underway' ),
+				]
+			);
+		}
 
 		// Habit Creator.
 		if ( file_exists( UNDERWAY_DIR . '/modules/habit-creator/assets/widget.css' ) ) {
@@ -151,12 +181,11 @@ final class WidgetHtmlController {
 	}
 
 	private static function render_future_drafts(): void {
-		// Classic widget echoes only a mount node; the React app lives in
-		// modules/future-drafts/build/widget.js and isn't wired into the new
-		// surface yet. Render a calm placeholder so the card isn't blank.
-		echo '<div class="future-drafts-host"><p style="margin:0;color:#50575e;">';
-		echo esc_html__( "Future Drafts editor isn't yet ported to the experimental Dashboard.", 'underway' );
-		echo '</p></div>';
+		// Classic widget echoes only the mount node — the React app lives in
+		// modules/future-drafts/build/widget.js and exposes
+		// window.UnderwayFutureDrafts.mount for the new dashboard surface
+		// to call after injecting this HTML.
+		echo '<div id="future-drafts-root"></div>';
 	}
 
 	private static function render_habit_creator(): void {

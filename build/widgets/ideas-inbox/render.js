@@ -49,7 +49,7 @@ var require_jsx_runtime = __commonJS({
 var import_react = __toESM(require_react());
 var import_i18n = __toESM(require_i18n());
 var import_jsx_runtime = __toESM(require_jsx_runtime());
-function WidgetHtml({ slug }) {
+function WidgetHtml({ slug, onAfterInject }) {
   const hostRef = (0, import_react.useRef)(null);
   const [status, setStatus] = (0, import_react.useState)("loading");
   (0, import_react.useEffect)(() => {
@@ -65,6 +65,7 @@ function WidgetHtml({ slug }) {
       if (hostRef.current && typeof res?.html === "string") {
         hostRef.current.innerHTML = res.html;
         setStatus("ok");
+        onAfterInject?.(hostRef.current);
       } else {
         setStatus("error");
       }

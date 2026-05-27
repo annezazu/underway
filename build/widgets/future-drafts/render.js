@@ -49,7 +49,7 @@ var require_jsx_runtime = __commonJS({
 var import_react = __toESM(require_react());
 var import_i18n = __toESM(require_i18n());
 var import_jsx_runtime = __toESM(require_jsx_runtime());
-function WidgetHtml({ slug }) {
+function WidgetHtml({ slug, onAfterInject }) {
   const hostRef = (0, import_react.useRef)(null);
   const [status, setStatus] = (0, import_react.useState)("loading");
   (0, import_react.useEffect)(() => {
@@ -65,6 +65,7 @@ function WidgetHtml({ slug }) {
       if (hostRef.current && typeof res?.html === "string") {
         hostRef.current.innerHTML = res.html;
         setStatus("ok");
+        onAfterInject?.(hostRef.current);
       } else {
         setStatus("error");
       }
@@ -87,7 +88,18 @@ function WidgetHtml({ slug }) {
 // widgets/future-drafts/render.tsx
 var import_jsx_runtime2 = __toESM(require_jsx_runtime());
 function FutureDraftsWidget() {
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(WidgetHtml, { slug: "future-drafts" });
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    WidgetHtml,
+    {
+      slug: "future-drafts",
+      onAfterInject: (host) => {
+        const root = host.querySelector("#future-drafts-root");
+        if (root && window.UnderwayFutureDrafts?.mount) {
+          window.UnderwayFutureDrafts.mount(root);
+        }
+      }
+    }
+  );
 }
 export {
   FutureDraftsWidget as default

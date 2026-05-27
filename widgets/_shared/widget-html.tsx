@@ -3,7 +3,12 @@ import { __ } from '@wordpress/i18n';
 
 declare const wp: { apiFetch?: ( opts: { path: string } ) => Promise< { html?: string } > };
 
-export default function WidgetHtml( { slug }: { slug: string } ) {
+interface WidgetHtmlProps {
+	slug: string;
+	onAfterInject?: ( host: HTMLDivElement ) => void;
+}
+
+export default function WidgetHtml( { slug, onAfterInject }: WidgetHtmlProps ) {
 	const hostRef = useRef< HTMLDivElement >( null );
 	const [ status, setStatus ] = useState< 'loading' | 'ok' | 'error' >( 'loading' );
 
@@ -21,6 +26,7 @@ export default function WidgetHtml( { slug }: { slug: string } ) {
 				if ( hostRef.current && typeof res?.html === 'string' ) {
 					hostRef.current.innerHTML = res.html;
 					setStatus( 'ok' );
+					onAfterInject?.( hostRef.current );
 				} else {
 					setStatus( 'error' );
 				}
