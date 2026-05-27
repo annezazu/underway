@@ -45,3 +45,11 @@ register_activation_hook( __FILE__, [ \Underway\Activation::class, 'activate' ] 
 register_deactivation_hook( __FILE__, [ \Underway\Activation::class, 'deactivate' ] );
 
 add_action( 'plugins_loaded', [ \Underway\Plugin::class, 'boot' ], 5 );
+
+// Experimental: register Underway widgets with the Gutenberg "Dashboard (Beta)"
+// surface. The generated build manifest is only present when `wp-build` has
+// been run, so the require is guarded.
+if ( is_file( __DIR__ . '/build/build.php' ) ) {
+	require_once __DIR__ . '/build/build.php';
+	\Underway\Dashboard\ExperimentalDashboardWidgets::boot();
+}

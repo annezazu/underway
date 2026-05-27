@@ -1,0 +1,25 @@
+{
+	"name": "underway",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Underway dashboard widgets, built for the experimental WordPress Dashboard.",
+	"license": "GPL-2.0-or-later",
+	"scripts": {
+		"build": "wp-build",
+		"dev": "wp-build --watch"
+	},
+	"devDependencies": {
+		"@wordpress/build": "^0.14.0",
+		"@wordpress/i18n": "^5.0.0",
+		"@wordpress/icons": "^10.0.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"typescript": "^5.4.0"
+	},
+	"wpPlugin": {
+		"name": "underway",
+		"scriptGlobal": "underway",
+		"packageNamespace": "underway",
+		"handlePrefix": "underway"
+	}
+}

@@ -1,0 +1,42 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/wp-admin/admin.php?page=dashboard-wp-admin",
+	"preferredVersions": {
+		"php": "8.3",
+		"wp": "latest"
+	},
+	"phpExtensionBundles": [ "kitchen-sink" ],
+	"features": { "networking": true },
+	"login": true,
+	"steps": [
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "gutenberg"
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "url",
+				"url": "https://github-proxy.com/proxy/?repo=annezazu/underway&branch=experimental-dashboard-widgets-demo"
+			}
+		},
+		{
+			"step": "setSiteOptions",
+			"options": {
+				"gutenberg-experiments": {
+					"gutenberg-dashboard-widgets": "1"
+				}
+			}
+		},
+		{
+			"step": "importWxr",
+			"file": {
+				"resource": "url",
+				"url": "https://raw.githubusercontent.com/annezazu/underway/experimental-dashboard-widgets-demo/playground-content.xml"
+			}
+		}
+	]
+}
